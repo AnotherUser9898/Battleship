@@ -2,8 +2,8 @@ import { executeAttack } from "./data-dom-interactions";
 import { switchPlayer,computerHit, currentPlayer,initializeBoardWithShips} from "./driver";
 import { updateBoard } from "./updateBoard";
 function setupEventListeners(yourGameboard, opponentGameboard) {
-  const yourCells = document.querySelectorAll(".your > .cell");
-  const oppenentCells = document.querySelectorAll(".opponent > .cell");
+  const yourCells = document.querySelectorAll(".your > tr > .cell");
+  const oppenentCells = document.querySelectorAll(".opponent > tr > .cell");
 
   yourCells.forEach((cell) => {
     cell.addEventListener("click", () => {

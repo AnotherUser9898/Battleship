@@ -16,35 +16,32 @@ for (let i = 0; i < toWords.length; i++) {
 }
 
 function setupCellHTML() {
-  const yourGrid = document.querySelector(".your-grid>.grid");
-  const opponentsGrid = document.querySelector(".opponent-grid>.grid");
+  const yourGrid = document.querySelector(".your");
+  const opponentsGrid = document.querySelector(".opponent");
 
   for (let i = 0; i < 10; i++) {
+    const yourRow = document.createElement("tr");
+    const opponentsRow = document.createElement("tr");
     for (let j = 0; j < 10; j++) {
-      const yourCell = document.createElement("cell");
+      const yourCell = document.createElement("td");
+      const shipNode = document.createElement("div");
+      shipNode.classList.add("ship-node");
       yourCell.classList.add("cell", `${toWords[i]}-${toWords[j]}`);
       yourCell.dataset.x = i;
       yourCell.dataset.y = j;
       yourCell.dataset.isHit = 0;
+      yourCell.appendChild(shipNode);
+      yourRow.appendChild(yourCell);
 
-      const opponentCell = document.createElement("cell");
+      const opponentCell = document.createElement("td");
       opponentCell.classList.add("cell", `${toWords[i]}-${toWords[j]}`);
       opponentCell.dataset.x = i;
       opponentCell.dataset.y = j;
       opponentCell.dataset.isHit = 0;
-
-      if (j == 9) {
-        yourCell.style.cssText += "border-right: 0.25px solid #3b82f6;";
-        opponentCell.style.cssText += "border-right: 0.25px solid #3b82f6;";
-      }
-
-      if (i == 0) {
-        yourCell.style.cssText += "border-top: 0.25px solid #3b82f6;";
-        opponentCell.style.cssText += "border-top: 0.25px solid #3b82f6;";
-      }
-      yourGrid.appendChild(yourCell);
-      opponentsGrid.appendChild(opponentCell);
+      opponentsRow.appendChild(opponentCell);
     }
+    yourGrid.appendChild(yourRow);
+    opponentsGrid.appendChild(opponentsRow);
   }
 }
 

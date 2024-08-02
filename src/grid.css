@@ -2,19 +2,22 @@
     height: min-content;
 }
 
-.grid {
-    display: grid;
-    grid-template-columns: repeat(10,40px);
-    grid-template-rows: repeat(10,40px);
+table {
+    border: 1px solid blue;
+    border-collapse: collapse;
 }
 
-.cell {
-    border-left: 0.25px solid #3b82f6;
-    border-bottom: 0.25px solid #3b82f6;
-    height: 40px;
-    width: 40px;
+td {
+    height: 2em;
+    width: 2em;
+    border: 1px solid blue;
+    padding: 0px;
 }
 
 .cell:hover {
     background-color: #e2e8f0;
+}
+
+.ship-node {
+    margin-top: -15.5px;
 }

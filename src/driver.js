@@ -3,6 +3,8 @@ import { updateBoard } from "./updateBoard";
 import { Player } from "./player";
 import { setupEventListeners } from "./set-event-listeners";
 import { executeAttack } from "./data-dom-interactions";
+import { removeAllInlineStyles } from "./remove-all-inline-styles";
+import { aboveToOnGrid } from "./above-to-on-grid";
 
 const shipsCounts = new Map();
 shipsCounts.set(4, 1);
@@ -25,7 +27,8 @@ function driver() {
   initializeBoardWithShips(humanPlayer.gameboard);
   initializeBoardWithShips(computerPlayer.gameboard);
   updateBoard(humanPlayer.gameboard, humanPlayer.type);
-  computerHit(humanPlayer.gameboard);
+  removeAllInlineStyles(humanPlayer.type);
+  aboveToOnGrid(humanPlayer.gameboard,humanPlayer.type);
   
 }
 

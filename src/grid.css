@@ -1,0 +1,20 @@
+.your-grid,.opponent-grid {
+    height: min-content;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(10,40px);
+    grid-template-rows: repeat(10,40px);
+}
+
+.cell {
+    border-left: 0.25px solid #3b82f6;
+    border-bottom: 0.25px solid #3b82f6;
+    height: 40px;
+    width: 40px;
+}
+
+.cell:hover {
+    background-color: #e2e8f0;
+}

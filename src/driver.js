@@ -49,16 +49,26 @@ function driver() {
 
 function playGame(cell, x, y) {
   if (currentPlayer == players.player2) {
-    let hit;
     setTimeout(() => {
-      hit = computerHit();
+      const attackObj = computerHit();
+      if (attackObj.status && attackObj.shipHit) {
+        playGame(cell, x, y);
+        return;
+      } else if (attackObj.status && attackObj.miss) {
+        switchPlayer();
+        renderPlayerSwitch();
+      }
     }, 2000);
-    if (hit) {
-      switchPlayer();
-      renderPlayerSwitch();
-    }
   } else {
-    if (executeAttack(playerObjects.player2.gameboard, cell, x, y)) {
+    const attackObj = executeAttack(
+      playerObjects.player2.gameboard,
+      cell,
+      x,
+      y
+    );
+    if (attackObj.status && attackObj.shipHit) {
+      return;
+    } else if (attackObj.status && attackObj.miss) {
       switchPlayer();
       renderPlayerSwitch();
 
@@ -69,9 +79,14 @@ function playGame(cell, x, y) {
 
 function delayedComputerHit(delay) {
   setTimeout(() => {
-    computerHit();
-    switchPlayer();
-    renderPlayerSwitch();
+    const attackObj = computerHit();
+    if (attackObj.status && attackObj.shipHit) {
+      delayedComputerHit(2000);
+      return;
+    } else if (attackObj.status && attackObj.miss) {
+      switchPlayer();
+      renderPlayerSwitch();
+    }
   }, delay);
 }
 function computerHit() {
@@ -82,8 +97,7 @@ function computerHit() {
     const selector = `.your > tr > .${position}`;
     const cell = document.querySelector(selector);
     if (cell.dataset.isHit == false) {
-      executeAttack(playerObjects.player1.gameboard, cell, x, y);
-      return true;
+      return executeAttack(playerObjects.player1.gameboard, cell, x, y);
     }
   }
 }

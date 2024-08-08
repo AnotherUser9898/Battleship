@@ -3,87 +3,99 @@ import { updateBoard } from "./updateBoard";
 import { Player } from "./player";
 import { setupEventListeners } from "./set-event-listeners";
 import { executeAttack } from "./data-dom-interactions";
-import { removeAllInlineStyles } from "./remove-all-inline-styles";
-import { aboveToOnGrid } from "./above-to-on-grid";
+import { renderPlayerSwitch } from "./render-player-switch";
+import { getRandomNumber } from "./random-number";
 
 const shipsCounts = new Map();
 shipsCounts.set(4, 1);
 shipsCounts.set(3, 2);
 shipsCounts.set(2, 3);
 shipsCounts.set(1, 4);
-let currentPlayer = "opponent";
+
+let players = {
+  player1: "your",
+  player2: "opponent",
+};
+
+let currentPlayer = players.player1;
+
 const switchPlayer = () => {
   if (currentPlayer == "opponent") {
     currentPlayer = "your";
   } else {
     currentPlayer = "opponent";
   }
-}
+};
+
+let layoutFinalized = false;
+const finalizeLayout = () => {
+  layoutFinalized = true;
+};
+
+let playerObjects = {
+  player1: new Player(players.player1),
+  player2: new Player(players.player2),
+};
 
 function driver() {
-  const humanPlayer = new Player("your");
-  const computerPlayer = new Player("opponent");
-  setupEventListeners(humanPlayer.gameboard, computerPlayer.gameboard);
-  initializeBoardWithShips(humanPlayer.gameboard);
-  initializeBoardWithShips(computerPlayer.gameboard);
-  updateBoard(humanPlayer.gameboard, humanPlayer.type);
-  removeAllInlineStyles(humanPlayer.type);
-  aboveToOnGrid(humanPlayer.gameboard,humanPlayer.type);
-  
+  setupEventListeners(
+    playerObjects.player1.gameboard,
+    playerObjects.player2.gameboard
+  );
+  playerObjects.player1.gameboard.initializeBoardWithShips();
+  playerObjects.player2.gameboard.initializeBoardWithShips();
+  updateBoard(playerObjects.player1.gameboard, players.player1);
 }
 
-function initializeBoardWithShips(gameboard) {
-  for (let length = 4; length >= 1 ; length--) {
-    let count = shipsCounts.get(length);
-    while (count > 0) {
-      const orientation = Math.floor(Math.random() * 2);
-      if (orientation == 0) {
-        const x1 = getRandomNumber();
-        const y1 = getRandomNumber();
-        const x2 = x1;
-        const y2 = y1 + length - 1;
-        if (y2 > 9) {
-          continue;
-        }
-        const coordinates = [x1, y1, x2, y2];
-        if (gameboard.addShip(coordinates)) {
-          count -= 1;
-        }
-      }
-      if (orientation == 1) {
-        const x1 = getRandomNumber();
-        const y1 = getRandomNumber();
-        const x2 = x1 + length - 1;
-        if (x2 > 9) {
-          continue;
-        }
-        const y2 = y1;
-        const coordinates = [x1, y1, x2, y2];
-        if (gameboard.addShip(coordinates)) {
-          count -= 1;
-        }
-      }
+function playGame(cell, x, y) {
+  if (currentPlayer == players.player2) {
+    let hit;
+    setTimeout(() => {
+      hit = computerHit();
+    }, 2000);
+    if (hit) {
+      switchPlayer();
+      renderPlayerSwitch();
+    }
+  } else {
+    if (executeAttack(playerObjects.player2.gameboard, cell, x, y)) {
+      switchPlayer();
+      renderPlayerSwitch();
+
+      delayedComputerHit(2000);
     }
   }
 }
 
-function computerHit(yourGameboard) {
+function delayedComputerHit(delay) {
+  setTimeout(() => {
+    computerHit();
+    switchPlayer();
+    renderPlayerSwitch();
+  }, delay);
+}
+function computerHit() {
   while (true) {
     const x = getRandomNumber();
     const y = getRandomNumber();
     const position = `${toWords[x]}-${toWords[y]}`;
-    const selector = `.your > .${position}`;
+    const selector = `.your > tr > .${position}`;
     const cell = document.querySelector(selector);
     if (cell.dataset.isHit == false) {
-      executeAttack(yourGameboard, cell, x, y);
-      switchPlayer();
-      return;
+      executeAttack(playerObjects.player1.gameboard, cell, x, y);
+      return true;
     }
   }
 }
 
-function getRandomNumber() {
-  return Math.floor(Math.random() * 10);
-}
-
-export { driver, currentPlayer,switchPlayer,computerHit,initializeBoardWithShips };
+export {
+  driver,
+  currentPlayer,
+  switchPlayer,
+  computerHit,
+  shipsCounts,
+  finalizeLayout,
+  layoutFinalized,
+  players,
+  playGame,
+};

@@ -1,5 +1,8 @@
 import { renderShipHit, renderMisHit } from "./render-hit";
 function executeAttack(gameboard, DOMCell, x, y) {
+  let status;
+  let miss;
+  let shipHit;
   if (DOMCell.dataset.isHit == 1) {
     return false;
   } else {
@@ -14,7 +17,6 @@ function executeAttack(gameboard, DOMCell, x, y) {
     DOMCell.dataset.isHit = 1;
     return true;
   }
-
 }
 
 export { executeAttack };

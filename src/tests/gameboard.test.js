@@ -77,6 +77,11 @@ test("adding two ships with adjacent coordinates",() => {
   expect(gameboard.addShip([1,2,1,3])).toBe(true);
   expect(gameboard.addShip([2,2,2,3])).toBe(false);
   expect(gameboard.addShip([7,5,9,5])).toBe(true);
-  expect(gameboard.addShip([6,6,8,6])).toBe(true);
-})
+  expect(gameboard.addShip([6,6,8,6])).toBe(false);
+});
+
+test("test random initialization of ships",() => {
+  gameboard.initializeBoardWithShips();
+  expect(gameboard.allShips.size).toBe(10);
+});
 

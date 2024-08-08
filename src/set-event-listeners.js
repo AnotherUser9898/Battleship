@@ -1,6 +1,16 @@
 import { executeAttack } from "./data-dom-interactions";
-import { switchPlayer,computerHit, currentPlayer,initializeBoardWithShips} from "./driver";
+import {
+  switchPlayer,
+  computerHit,
+  currentPlayer,
+  finalizeLayout,
+  layoutFinalized,
+  playGame,
+} from "./driver";
 import { updateBoard } from "./updateBoard";
+import { removeAllInlineStyles } from "./remove-all-inline-styles";
+import { aboveToOnGrid } from "./above-to-on-grid";
+import { renderPlayerSwitch } from "./render-player-switch";
 function setupEventListeners(yourGameboard, opponentGameboard) {
   const yourCells = document.querySelectorAll(".your > tr > .cell");
   const oppenentCells = document.querySelectorAll(".opponent > tr > .cell");
@@ -9,7 +19,7 @@ function setupEventListeners(yourGameboard, opponentGameboard) {
     cell.addEventListener("click", () => {
       const x = Number(cell.dataset.x);
       const y = Number(cell.dataset.y);
-      executeAttack(yourGameboard,cell,x,y);
+      playGame(cell, x, y);
     });
   });
 
@@ -21,21 +31,28 @@ function setupEventListeners(yourGameboard, opponentGameboard) {
       }
       const x = Number(cell.dataset.x);
       const y = Number(cell.dataset.y);
-      if (executeAttack(opponentGameboard,cell,x,y)) {
-        switchPlayer();
-        setTimeout(() => {
-          computerHit(yourGameboard);
-        },1500);
-      }
+      playGame(cell, x, y);
     });
   });
 
   const randomize = document.querySelector(".randomize");
-  randomize.addEventListener("click",() => {
+  randomize.addEventListener("click", () => {
+    if (layoutFinalized == true) {
+      return;
+    }
     yourGameboard.clearBoard();
-    initializeBoardWithShips(yourGameboard);
-    updateBoard(yourGameboard,"your");
-  })
+    yourGameboard.initializeBoardWithShips();
+    removeAllInlineStyles("your");
+    updateBoard(yourGameboard, "your");
+  });
+
+  const play = document.querySelector(".play");
+  play.addEventListener("click", () => {
+    removeAllInlineStyles("your");
+    aboveToOnGrid(yourGameboard, "your");
+    finalizeLayout();
+    renderPlayerSwitch();
+  });
 }
 
-export {setupEventListeners};
+export { setupEventListeners };

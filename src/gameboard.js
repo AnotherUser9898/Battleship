@@ -1,4 +1,6 @@
 import { Ship } from "./ship";
+import { getRandomNumber } from "./random-number";
+import { shipsCounts } from "./driver";
 class Gameboard {
   grid;
   gridSize;
@@ -33,7 +35,7 @@ class Gameboard {
 
   setOffLimitArea(coordinates) {
     if (coordinates[0] == coordinates[2]) {
-      for (let i = coordinates[1]; i <= coordinates[3];i++) {
+      for (let i = coordinates[1]; i <= coordinates[3]; i++) {
         if (i == coordinates[1] && coordinates[1] > 0) {
           this.grid[coordinates[0]][coordinates[1] - 1] = 2;
         }
@@ -46,10 +48,9 @@ class Gameboard {
         if (coordinates[0] < 9) {
           this.grid[coordinates[0] + 1][i] = 2;
         }
-        
       }
-    }else if (coordinates[1] == coordinates[3]) {
-      for (let i = coordinates[0]; i <= coordinates[2];i++) {
+    } else if (coordinates[1] == coordinates[3]) {
+      for (let i = coordinates[0]; i <= coordinates[2]; i++) {
         if (i == coordinates[0] && coordinates[0] > 0) {
           this.grid[coordinates[0] - 1][coordinates[1]] = 2;
         }
@@ -62,10 +63,8 @@ class Gameboard {
         if (coordinates[1] < 9) {
           this.grid[i][coordinates[1] + 1] = 2;
         }
-        
       }
     }
-    
   }
 
   addShip(coordinates) {
@@ -86,7 +85,7 @@ class Gameboard {
           }
         }
         this.setOffLimitArea(coordinates);
-        this.allShips.set(newShip,coordinates);
+        this.allShips.set(newShip, coordinates);
       } else if (coordinates[1] == coordinates[3]) {
         const length = coordinates[2] - coordinates[0] + 1;
         const newShip = new Ship(length);
@@ -100,7 +99,7 @@ class Gameboard {
           }
         }
         this.setOffLimitArea(coordinates);
-        this.allShips.set(newShip,coordinates);
+        this.allShips.set(newShip, coordinates);
       }
       this.numberOfShips += 1;
       return true;
@@ -123,6 +122,41 @@ class Gameboard {
 
   allShipsSunk() {
     return this.numberOfShips == 0;
+  }
+
+  initializeBoardWithShips() {
+    for (let length = 4; length >= 1; length--) {
+      let count = shipsCounts.get(length);
+      while (count > 0) {
+        const orientation = Math.floor(Math.random() * 2);
+        if (orientation == 0) {
+          const x1 = getRandomNumber();
+          const y1 = getRandomNumber();
+          const x2 = x1;
+          const y2 = y1 + length - 1;
+          if (y2 > 9) {
+            continue;
+          }
+          const coordinates = [x1, y1, x2, y2];
+          if (this.addShip(coordinates)) {
+            count -= 1;
+          }
+        }
+        if (orientation == 1) {
+          const x1 = getRandomNumber();
+          const y1 = getRandomNumber();
+          const x2 = x1 + length - 1;
+          if (x2 > 9) {
+            continue;
+          }
+          const y2 = y1;
+          const coordinates = [x1, y1, x2, y2];
+          if (this.addShip(coordinates)) {
+            count -= 1;
+          }
+        }
+      }
+    }
   }
 }
 

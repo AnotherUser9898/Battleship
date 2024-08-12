@@ -1,10 +1,16 @@
 .your-grid,.opponent-grid {
     height: min-content;
+    user-select: none;
 }
 
 table {
     border: 1px solid blue;
     border-collapse: collapse;
+    user-select: none;
+}
+
+tr {
+    position: relative;
 }
 
 td {
@@ -12,12 +18,13 @@ td {
     width: 2em;
     border: 1px solid blue;
     padding: 0px;
+    position: relative;
 }
 
-.cell:hover {
-    background-color: #e2e8f0;
-}
 
-.ship-node {
-    margin-top: -15.5px;
+.ship-node[data-present] {
+    user-select: text;
+    top: 0px;
+    
+    
 }

@@ -5,6 +5,9 @@ import { setupEventListeners } from "./set-event-listeners";
 import { executeAttack } from "./data-dom-interactions";
 import { renderPlayerSwitch } from "./render-player-switch";
 import { getRandomNumber } from "./random-number";
+import { removeAllInlineStyles } from "./remove-all-inline-styles";
+import { aboveToOnGrid } from "./above-to-on-grid";
+import { draggableEvent } from "./data-dom-interactions";
 
 const shipsCounts = new Map();
 shipsCounts.set(4, 1);
@@ -38,13 +41,12 @@ let playerObjects = {
 };
 
 function driver() {
-  setupEventListeners(
-    playerObjects.player1.gameboard,
-    playerObjects.player2.gameboard
-  );
+  setupGamePlay(playerObjects.player1.gameboard, players.player1);
+  randomize(playerObjects.player1.gameboard, players.player1);
   playerObjects.player1.gameboard.initializeBoardWithShips();
   playerObjects.player2.gameboard.initializeBoardWithShips();
   updateBoard(playerObjects.player1.gameboard, players.player1);
+  draggableEvent();
 }
 
 function playGame(cell, x, y) {
@@ -100,6 +102,41 @@ function computerHit() {
       return executeAttack(playerObjects.player1.gameboard, cell, x, y);
     }
   }
+}
+
+function setupGamePlay(gameboard, player) {
+  const play = document.querySelector(".play");
+  play.addEventListener("click", () => {
+    setupEventListeners(
+      playerObjects.player1.gameboard,
+      playerObjects.player2.gameboard
+    );
+    removeAllInlineStyles(player);
+    aboveToOnGrid(gameboard, player);
+    finalizeLayout();
+    renderPlayerSwitch();
+  });
+}
+
+function randomize(gameboard, player) {
+  const randomize = document.querySelector(".randomize");
+  randomize.addEventListener("click", () => {
+    if (layoutFinalized == true) {
+      return;
+    }
+    gameboard.clearBoard();
+    gameboard.initializeBoardWithShips();
+    removeAllInlineStyles(player);
+    updateBoard(gameboard, player);
+  });
+}
+
+function endGame() {
+  playerObjects.array.forEach((element) => {
+    element.clear();
+    removeAllInlineStyles(players.player1);
+    removeAllInlineStyles(players.player2);
+  });
 }
 
 export {

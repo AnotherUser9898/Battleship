@@ -22,4 +22,39 @@ function executeAttack(gameboard, DOMCell, x, y) {
   return { status, miss, shipHit };
 }
 
-export { executeAttack };
+function draggableEvent() {
+  const shipNodes = document.querySelectorAll("[data-present]");
+  shipNodes.forEach((shipNode) => {
+    shipNode.onmousedown = (event) => {
+      let shiftX = event.clientX - shipNode.getBoundingClientRect().left;
+      let shiftY = event.clientY - shipNode.getBoundingClientRect().top;
+
+      shipNode.style.zIndex = 1000;
+      document.body.append(shipNode);
+
+      moveAt(event.pageX, event.pageY);
+
+      function moveAt(pageX, pageY) {
+        shipNode.style.left = pageX - shiftX + "px";
+        shipNode.style.top = pageY - shiftY + "px";
+      }
+
+      function onMouseMove(event) {
+        moveAt(event.pageX, event.pageY);
+      }
+
+      document.addEventListener("mousemove", onMouseMove);
+
+      shipNode.onmouseup = () => {
+        console.log("fired mouseup");
+        document.removeEventListener("mousemove", onMouseMove);
+        shipNode.onmouseup = null;
+      };
+    };
+    shipNode.ondragstart = () => {
+      return false;
+    };
+  });
+}
+
+export { executeAttack, draggableEvent };

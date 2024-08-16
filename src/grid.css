@@ -4,7 +4,6 @@
 }
 
 table {
-    border: 1px solid blue;
     border-collapse: collapse;
     user-select: none;
 }
@@ -25,6 +24,10 @@ td {
 .ship-node[data-present] {
     user-select: text;
     top: 0px;
-    
-    
+}
+
+.ship-node {
+    height: 2em;
+    width: 2em;
+    z-index: 10;
 }

@@ -7,7 +7,6 @@ import { renderPlayerSwitch } from "./render-player-switch";
 import { getRandomNumber } from "./random-number";
 import { removeAllInlineStyles } from "./remove-all-inline-styles";
 import { aboveToOnGrid } from "./above-to-on-grid";
-import { draggableEvent } from "./data-dom-interactions";
 
 const shipsCounts = new Map();
 shipsCounts.set(4, 1);
@@ -46,7 +45,6 @@ function driver() {
   playerObjects.player1.gameboard.initializeBoardWithShips();
   playerObjects.player2.gameboard.initializeBoardWithShips();
   updateBoard(playerObjects.player1.gameboard, players.player1);
-  draggableEvent();
 }
 
 function playGame(cell, x, y) {

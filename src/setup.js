@@ -26,6 +26,8 @@ function setupCellHTML() {
       const yourCell = document.createElement("td");
       const shipNode = document.createElement("div");
       shipNode.classList.add("ship-node");
+      shipNode.dataset.shipX = i;
+      shipNode.dataset.shipY = j;
       yourCell.classList.add("cell", `${toWords[i]}-${toWords[j]}`);
       yourCell.dataset.x = i;
       yourCell.dataset.y = j;
@@ -45,5 +47,4 @@ function setupCellHTML() {
   }
 }
 
-
-export { setupCellHTML, toWords};
+export { setupCellHTML, toWords };

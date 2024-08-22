@@ -9,25 +9,34 @@
     <header>
         <div class="title">Battleship</div>
         <div class="instruction-bar"></div>
+
+        <div class="mode-buttons">
+            <div class="against-computer mode-select" id = "computer-button">vs Computer</div>
+            <div class="against-human mode-select" id = "human-button">vs Human</div>
+        </div>
     </header>
     <section class="main">
-        <div class="your-grid">
-            <table class="grid your">
-                
-            </table>
-            <div class="grid-info">Your Grid</div>
-
+        <div class="around-grid">
+            <div class="your-grid">
+                <table class="grid your">
+            
+                </table>
+                <div class="grid-info">Your Grid</div>
+            </div>
+            <div class="randomize randomize-your" data-linked-grid = "your">Randomize</div>
         </div>
-        <button class="play">Play</button>
-        <div class="opponent-grid">
-            <table class="grid opponent">
-
-            </table>
-            <div class="grid-info">Opponent's Grid</div>
+        <div class="function-buttons">
+            <button class="pass-device">Pass device</button>
+            <button class="play">Play</button>
+        </div>
+        <div class="around-grid">
+            <div class="opponent-grid">
+                <table class="grid opponent">
+                </table>
+                <div class="grid-info">Opponent's Grid</div>
+            </div>
+            <div class="randomize randomize-opponent" data-linked-grid = "opponent">Randomize</div>
         </div>
     </section>
-    <div class="function-buttons">
-        <div class="randomize">Randomize</div>
-    </div>
 </body>
 </html>

@@ -36,10 +36,15 @@ function setupCellHTML() {
       yourRow.appendChild(yourCell);
 
       const opponentCell = document.createElement("td");
+      const opponentShipNode = document.createElement("div");
+      opponentShipNode.classList.add("ship-node");
+      opponentShipNode.dataset.shipX = i;
+      opponentShipNode.dataset.shipY = j;
       opponentCell.classList.add("cell", `${toWords[i]}-${toWords[j]}`);
       opponentCell.dataset.x = i;
       opponentCell.dataset.y = j;
       opponentCell.dataset.isHit = 0;
+      opponentCell.appendChild(opponentShipNode);
       opponentsRow.appendChild(opponentCell);
     }
     yourGrid.appendChild(yourRow);

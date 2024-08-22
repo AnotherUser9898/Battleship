@@ -77,29 +77,46 @@ class Gameboard {
         const length = coordinates[3] - coordinates[1] + 1;
         const newShip = new Ship(length);
         const row = coordinates[0];
+        let vacant = true;
         for (let j = coordinates[1]; j < coordinates[3] + 1; j++) {
-          if (this.grid[row][j] == 0) {
-            this.grid[row][j] = newShip;
-          } else {
+          if (this.grid[row][j] != 0) {
+            vacant = false;
             return false;
           }
         }
-        this.setOffLimitArea(coordinates);
-        this.allShips.set(newShip, coordinates);
+        if (vacant) {
+          for (let j = coordinates[1]; j < coordinates[3] + 1; j++) {
+            if (this.grid[row][j] == 0) {
+              this.grid[row][j] = newShip;
+            }
+          }
+          this.setOffLimitArea(coordinates);
+          this.allShips.set(newShip, coordinates);
+        }
       } else if (coordinates[1] == coordinates[3]) {
         const length = coordinates[2] - coordinates[0] + 1;
         const newShip = new Ship(length);
         const col = coordinates[1];
+        let vacant = true;
         for (let i = coordinates[0]; i < coordinates[2] + 1; i++) {
           newShip.orientation = "vertical";
-          if (this.grid[i][col] == 0) {
-            this.grid[i][col] = newShip;
-          } else {
+          if (this.grid[i][col] != 0) {
+            vacant = false;
             return false;
           }
         }
-        this.setOffLimitArea(coordinates);
-        this.allShips.set(newShip, coordinates);
+        if (vacant) {
+          for (let i = coordinates[0]; i < coordinates[2] + 1; i++) {
+            newShip.orientation = "vertical";
+            if (this.grid[i][col] == 0) {
+              this.grid[i][col] = newShip;
+            } else {
+              return false;
+            }
+          }
+          this.setOffLimitArea(coordinates);
+          this.allShips.set(newShip, coordinates);
+        }
       }
       this.numberOfShips += 1;
       return true;

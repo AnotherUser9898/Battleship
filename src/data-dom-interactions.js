@@ -10,9 +10,6 @@ function executeAttack(gameboard, DOMCell, x, y) {
     if (gameboard.receiveAttack(x, y)) {
       renderShipHit(DOMCell);
       shipHit = true;
-      if (gameboard.allShipsSunk()) {
-        alert("The Computer won");
-      }
     } else {
       renderMisHit(DOMCell);
       miss = true;

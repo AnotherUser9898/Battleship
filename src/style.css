@@ -24,16 +24,46 @@ button {
 }
 
 header {
-    background-color: aqua;
+    display: flex;
+    justify-content: space-around;
 }
 
 .function-buttons {
     display: flex;
-    gap: 10px;
-    padding-left: 25px;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.pass-device {
+    display: none;
+}
+
+.around-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.randomize {
     color: blue;
     text-decoration: underline;
     cursor: pointer;
 }
 
+.mode-select {
+    padding: 15px;
+    font-weight: bold;
+    border: 2px solid blue;
+}
+
+.mode-buttons {
+    display: flex;
+    gap: 10px;
+    cursor: pointer;
+}
+
+#computer-button {
+    color: white;
+    background-color: blue;
+}
 

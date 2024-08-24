@@ -3,7 +3,7 @@ import { toWords } from "./setup";
 function executeAttack(gameboard, DOMCell, x, y) {
   let status;
   let miss;
-  let shipHit;
+  let shipHit = false;
   if (DOMCell.dataset.isHit == 1) {
     status = false;
   } else {
@@ -17,7 +17,7 @@ function executeAttack(gameboard, DOMCell, x, y) {
     status = true;
     DOMCell.dataset.isHit = 1;
   }
-  return { status, miss, shipHit };
+  return { status, miss, shipHit, x, y };
 }
 
 function highlight(ship, startCell) {

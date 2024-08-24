@@ -84,8 +84,24 @@ function driver() {
   setupComputerGame();
 }
 
-function playGame(cell, x, y) {
+function playGame(cell, x, y, alreadyHit) {
   if (currentPlayer == players.player2) {
+    if (alreadyHit) {
+      const adjacentCell = getRandomAdjacentCell(x, y);
+      executeAttack(
+        playerObjects.player1,
+        adjacentCell.cell,
+        adjacentCell.xCoordinate,
+        adjacentCell.yCoordinate
+      );
+      playGame(
+        adjacentCell.cell,
+        adjacentCell.xCoordinate,
+        adjacentCell.yCoordinate,
+        true
+      );
+      return;
+    }
     setTimeout(() => {
       const attackObj = computerHit();
       if (playerObjects.player1.gameboard.allShipsSunk()) {
@@ -94,7 +110,7 @@ function playGame(cell, x, y) {
         return;
       }
       if (attackObj.status && attackObj.shipHit) {
-        playGame(cell, x, y);
+        playGame(cell, attackObj.x, attackObj.y, true);
         return;
       } else if (attackObj.status && attackObj.miss) {
         switchPlayer();
@@ -119,7 +135,7 @@ function playGame(cell, x, y) {
       switchPlayer();
       renderPlayerSwitch();
 
-      delayedComputerHit(2000);
+      delayedComputerHit(2000, attackObj.x, attackObj.y, false);
     }
   }
 }
@@ -164,11 +180,32 @@ function playGameVsHuman(cell, x, y) {
   }
 }
 
-function delayedComputerHit(delay) {
+function delayedComputerHit(delay, x, y, alreadyHit) {
   setTimeout(() => {
+    if (alreadyHit) {
+      const adjacentCell = getRandomAdjacentCell(x, y);
+      const attackObj = executeAttack(
+        playerObjects.player1.gameboard,
+        adjacentCell.cell,
+        adjacentCell.xCoordinate,
+        adjacentCell.yCoordinate
+      );
+      if (attackObj.status && attackObj.shipHit) {
+        delayedComputerHit(
+          2000,
+          adjacentCell.xCoordinate,
+          adjacentCell.yCoordinate,
+          attackObj.shipHit
+        );
+      } else if (attackObj.status && attackObj.miss) {
+        switchPlayer();
+        renderPlayerSwitch();
+      }
+      return;
+    }
     const attackObj = computerHit();
     if (attackObj.status && attackObj.shipHit) {
-      delayedComputerHit(2000);
+      delayedComputerHit(2000, attackObj.x, attackObj.y, attackObj.shipHit);
       return;
     } else if (attackObj.status && attackObj.miss) {
       switchPlayer();
@@ -185,6 +222,38 @@ function computerHit() {
     const cell = document.querySelector(selector);
     if (cell.dataset.isHit == false) {
       return executeAttack(playerObjects.player1.gameboard, cell, x, y);
+    }
+  }
+}
+
+function getRandomAdjacentCell(x, y) {
+  const choices = [];
+  if (x > 0) {
+    const obj = { xCoordinate: x - 1, yCoordinate: y };
+    choices.push(obj);
+  }
+  if (x < 9) {
+    const obj = { xCoordinate: x + 1, yCoordinate: y };
+    choices.push(obj);
+  }
+  if (y > 0) {
+    const obj = { xCoordinate: x, yCoordinate: y - 1 };
+    choices.push(obj);
+  }
+  if (y < 9) {
+    const obj = { xCoordinate: x, yCoordinate: y + 1 };
+    choices.push(obj);
+  }
+
+  while (true) {
+    const index = Math.floor(Math.random() * choices.length);
+    const x = choices[index].xCoordinate;
+    const y = choices[index].yCoordinate;
+    const position = `${toWords[x]}-${toWords[y]}`;
+    const selector = `.your > tr > .${position}`;
+    const cell = document.querySelector(selector);
+    if (cell.dataset.isHit == false) {
+      return Object.assign({}, choices[index], { cell });
     }
   }
 }
@@ -211,7 +280,7 @@ function setupGamePlay() {
 function randomize(gameboard, player) {
   const randomize = document.querySelector(`.randomize-${player}`);
   randomize.addEventListener("click", () => {
-    if (layoutFinalized == true) {
+    if (layoutFinalized == true || currentPlayer == player) {
       return;
     }
     gameboard.clearBoard();

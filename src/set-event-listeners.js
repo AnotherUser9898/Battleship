@@ -18,7 +18,7 @@ function setupEventListeners() {
       const x = Number(cell.dataset.x);
       const y = Number(cell.dataset.y);
       if (mode == "Computer") {
-        playGame(cell, x, y);
+        playGame(cell, x, y, false);
       } else {
         playGameVsHuman(cell, x, y);
       }
@@ -30,7 +30,7 @@ function setupEventListeners() {
       const x = Number(cell.dataset.x);
       const y = Number(cell.dataset.y);
       if (mode == "Computer") {
-        playGame(cell, x, y);
+        playGame(cell, x, y, false);
       } else {
         playGameVsHuman(cell, x, y);
       }

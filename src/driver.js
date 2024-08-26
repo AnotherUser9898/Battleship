@@ -16,6 +16,7 @@ import { setupCellHTML } from "./setup";
 import { addPassDeviceEvent } from "./set-event-listeners";
 
 let mode = "Computer";
+const instructionBar = document.querySelector(".instruction-bar");
 
 const switchMode = () => {
   mode = mode == "Computer" ? "Human" : "Computer";
@@ -32,7 +33,7 @@ let players = {
   player2: "opponent",
 };
 
-let currentPlayer = players.player1;
+let currentPlayer = players.player2;
 
 const switchPlayer = () => {
   if (currentPlayer == "opponent") {
@@ -40,11 +41,15 @@ const switchPlayer = () => {
   } else {
     currentPlayer = "opponent";
   }
+  if (layoutFinalized) {
+    instructionBar.textContent = `${currentPlayer}'s turn`;
+  }
 };
 
 let layoutFinalized = false;
 const finalizeLayout = () => {
   layoutFinalized = true;
+  instructionBar.textContent = `${currentPlayer}'s turn`;
 };
 
 let playerObjects = {
@@ -266,8 +271,11 @@ function playButtonEvent() {
     aboveToOnGrid(playerObjects.player1.gameboard, players.player1);
   }
   finalizeLayout();
+  currentPlayer = players.player1;
   if (mode == "Human") {
-    renderPassDevice();
+    const passDevice = document.querySelector(".pass-device");
+    passDevice.style.display = "none";
+    renderPlayerSwitch();
   } else {
     renderPlayerSwitch();
   }

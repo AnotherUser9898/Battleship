@@ -1,4 +1,5 @@
 import { mode, switchMode } from "./driver";
+// render changes in page when mode is changed
 function renderModeChange(event) {
   const computerButton = document.querySelector("#computer-button");
   const humanButton = document.querySelector("#human-button");

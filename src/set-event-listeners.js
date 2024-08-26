@@ -9,6 +9,7 @@ import {
 import { renderModeChange } from "./render-mode-change";
 import { passDevice } from "./pass-device";
 import { removePlayerSwitchStyles } from "./remove-all-inline-styles";
+// sets up individual event listeners for grid cells
 function setupEventListeners() {
   const yourCells = document.querySelectorAll(".your > tr > .cell");
   const oppenentCells = document.querySelectorAll(".opponent > tr > .cell");
@@ -38,6 +39,7 @@ function setupEventListeners() {
   });
 }
 
+// adds event listeners that change button style and re-renders the page to indicate game mode
 function setModeChangeButtonEvents() {
   const computerButton = document.querySelector("#computer-button");
   const humanButton = document.querySelector("#human-button");
@@ -61,6 +63,7 @@ function setModeChangeButtonEvents() {
   });
 }
 
+// sets up pass device event listener
 function addPassDeviceEvent() {
   const passDeviceButton = document.querySelector(".pass-device");
   passDeviceButton.addEventListener("click", passDevice);

@@ -15,6 +15,7 @@ import { removeEventListeners } from "./remove-event-listeners";
 import { setupCellHTML } from "./setup";
 import { addPassDeviceEvent } from "./set-event-listeners";
 
+// Globals
 let mode = "Computer";
 const instructionBar = document.querySelector(".instruction-bar");
 
@@ -56,6 +57,8 @@ let playerObjects = {
   player1: new Player(players.player1),
   player2: new Player(players.player2),
 };
+
+// initializes the player grids and event listeners
 function initialize() {
   setModeChangeButtonEvents();
   addPassDeviceEvent();
@@ -63,7 +66,9 @@ function initialize() {
   randomize(playerObjects.player2.gameboard, players.player2);
   playerObjects.player1.gameboard.initializeBoardWithShips();
   playerObjects.player2.gameboard.initializeBoardWithShips();
+  setupGamePlay(playerObjects.player1.gameboard, players.player1);
 }
+// sets up the game for the computer mode
 function setupComputerGame() {
   const passDeviceButton = document.querySelector(".pass-device");
   const randomizeOpponent = document.querySelector(".randomize-opponent");
@@ -74,6 +79,7 @@ function setupComputerGame() {
   passDeviceButton.style.display = "none";
 }
 
+// sets up the game for the human mode
 function setupHumanGame() {
   const passDeviceButton = document.querySelector(".pass-device");
   const randomizeOpponent = document.querySelector(".randomize-opponent");
@@ -83,12 +89,14 @@ function setupHumanGame() {
   updateBoard(playerObjects.player2.gameboard, players.player2);
   renderPassDevice();
 }
+
+// drives the game when it is loaded for the first time
 function driver() {
   initialize();
-  setupGamePlay(playerObjects.player1.gameboard, players.player1);
   setupComputerGame();
 }
 
+// drives the game for the computer mode
 function playGame(cell, x, y, alreadyHit) {
   if (currentPlayer == players.player2) {
     if (alreadyHit) {
@@ -145,6 +153,7 @@ function playGame(cell, x, y, alreadyHit) {
   }
 }
 
+// drives the game for the human mode
 function playGameVsHuman(cell, x, y) {
   if (currentPlayer == players.player1) {
     const attackObj = executeAttack(
@@ -185,6 +194,7 @@ function playGameVsHuman(cell, x, y) {
   }
 }
 
+// runs the computerHit() functions after a specified delay
 function delayedComputerHit(delay, x, y, alreadyHit) {
   setTimeout(() => {
     if (alreadyHit) {
@@ -218,6 +228,7 @@ function delayedComputerHit(delay, x, y, alreadyHit) {
     }
   }, delay);
 }
+// base function that hits as the opponents grid as the computer
 function computerHit() {
   while (true) {
     const x = getRandomNumber();
@@ -231,6 +242,7 @@ function computerHit() {
   }
 }
 
+// returns a cell adjacent to the given cell that has not been hit
 function getRandomAdjacentCell(x, y) {
   const choices = [];
   if (x > 0) {
@@ -263,6 +275,7 @@ function getRandomAdjacentCell(x, y) {
   }
 }
 
+// sets up grid event listeners and does necessary things when the power button is pressed
 function playButtonEvent() {
   setupEventListeners();
   removeAllInlineStyles(players.player1);
@@ -280,11 +293,13 @@ function playButtonEvent() {
     renderPlayerSwitch();
   }
 }
+// links playButtonEvent() to play button's click event
 function setupGamePlay() {
   const play = document.querySelector(".play");
   play.addEventListener("click", playButtonEvent);
 }
 
+// randomizes ship positions in the specified player grid
 function randomize(gameboard, player) {
   const randomize = document.querySelector(`.randomize-${player}`);
   randomize.addEventListener("click", () => {
@@ -298,6 +313,7 @@ function randomize(gameboard, player) {
   });
 }
 
+// performs functions when game ends
 function endGame() {
   for (const playerObject in playerObjects) {
     const element = playerObjects[playerObject];
@@ -314,7 +330,7 @@ function endGame() {
   const play = document.querySelector(".play");
   play.removeEventListener("click", playButtonEvent);
 }
-
+// restarts the game
 function restartGame() {
   const computerButton = document.querySelector("#computer-button");
   layoutFinalized = false;

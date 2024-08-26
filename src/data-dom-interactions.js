@@ -1,5 +1,6 @@
 import { renderShipHit, renderMisHit } from "./render-hit";
 import { toWords } from "./setup";
+// executes ship attack on the gameboard and re-renders the grid accordingly
 function executeAttack(gameboard, DOMCell, x, y) {
   let status;
   let miss;
